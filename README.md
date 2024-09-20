@@ -26,6 +26,8 @@ PAM 설정 파일: PAM은 /etc/pam.d/ 디렉터리에 있는 설정 파일을 �
 /etc/pam.d/sshd: SSH 로그인에 대한 PAM 설정
 /etc/pam.d/passwd: 비밀번호 변경에 대한 PAM 설정
 <br>
+<br>
+<br>
 🔧PAM 모듈: PAM은 다양한 모듈을 사용해 특정 인증 규칙을 적용한다. 각 모듈은 특정 인증 기능을 제공한다. 
 
 <br>
