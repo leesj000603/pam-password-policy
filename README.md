@@ -1,25 +1,62 @@
-# PAM 비밀번호 규제 실습
+# 🔑(Linux)PAM 비밀번호 규제 실습
 
 
-PAM(PAM 모듈) 중 하나인 pam_pwquality 모듈을 설치
+### PAM 관리 방법:
+PAM 설정 파일: PAM은 /etc/pam.d/ 디렉터리에 있는 설정 파일을 통해 관리된다. 각 응용 프로그램이나 서비스(예: login, sshd, passwd)는 별도의 PAM 설정 파일을 갖고 있다.
+
+예시:
+
+/etc/pam.d/sshd: SSH 로그인에 대한 PAM 설정
+/etc/pam.d/passwd: 비밀번호 변경에 대한 PAM 설정
+PAM 모듈: PAM은 다양한 모듈을 사용해 특정 인증 규칙을 적용한다. 각 모듈은 특정 인증 기능을 제공한다. 
+
+### 대표적인 모듈
+
+- pam_unix.so: 기본적인 사용자 인증을 담당하며, /etc/passwd나 /etc/shadow 파일을 사용해 인증한다.
+- am_pwquality.so: 비밀번호의 복잡성 규칙(최소 길이, 복잡성, 사전 단어 체크 등)을 설정한다.
+- pam_tally2.so: 로그인 실패 횟수를 제한해 계정 잠금 기능을 제공힌다.
+- PAM 규칙 설정 방식: 각 PAM 설정 파일에는 4가지 컨트롤 플래그가 있으며, 이를 통해 인증 절차가 어떻게 처리될지 정의할 수 있다.
+
+
+### 컨트롤 플래그
+auth: 사용자의 인증 절차를 정의 (예: 비밀번호 입력 요구)
+account: 계정의 접근 제한을 정의 (예: 계정이 활성화된 상태인지 확인)
+password: 비밀번호 변경 시 적용될 규칙 정의
+session: 로그인 세션 설정 (예: 로그인 시 필요한 환경 설정)
+
+
+<br>
+<br>
+
+
+### 비밀번호 규제 설정을 위한 PAM(PAM 모듈) 중 하나인 pam_pwquality 모듈을 설치
+
+<br>
+<br>
 
 ```
 sudo nano /etc/pam.d/common-password  # Ubuntu/Debian
 sudo nano /etc/pam.d/system-auth  # RHEL/CentOS
 ```
 
-설정 파일 열기
+<br>
+<br>
+
+### 설정 파일 열기
 ```
 sudo vi /etc/pam.d/common-password
 ```
 
+<br>
+<br>
 
-pw 조건을 설정하는
+### pw 조건을 설정하는 부분을 수정한다.
 `password requisite pam_pwquality`
-에 해당하는 부분을 수정한다.
 
 
-다음과 같이 수정
+<br>
+
+### 다음과 같이 수정
 ```
 #
 # /etc/pam.d/common-password - password-related modules common to all services
@@ -57,21 +94,35 @@ password        required                        pam_permit.so
 # end of pam-auth-update config
 ```
 
-- retry - 최대 비밀번호 변경 시도 횟수
-- minlen - 최소 비밀번호 길이
-- difok - 이전 비밀번호와 달라야하는 최소 글자수
+<br>
+
+ - retry - 최대 비밀번호 변경 시도 횟수
+ - minlen - 최소 비밀번호 길이
+ - difok - 이전 비밀번호와 달라야하는 최소 글자수
 
 
+<br>
+<br>
 
-기존 비밀번호는 유지되며, 비밀번호 변경 시에 설정을 참고하여 비밀번호를 규제한다.
+
+### 기존 비밀번호는 유지되며, 비밀번호 변경 시에 설정을 참고하여 비밀번호를 규제한다.
+<br>
+
+### 비밀번호 변경 시도
 ```
 passwd <user 명>
 ```
 ![11111](https://github.com/user-attachments/assets/390e4c0c-763c-4728-b44d-5e0a0a2d12ef)
 
 
-설정한 비밀번호 최소 길이보다 짧은 경우
+<br>
 
-불용어 사전에 있는 글자를 포함하거나
+- 설정한 비밀번호 최소 길이보다 짧은 경우
 
-이전 비밀번호와 달라야하는 최소 글자수를 만족하지 못하는 경우 변경 실패 처리
+- 불용어 사전에 있는 글자를 포함하거나
+
+- 이전 비밀번호와 달라야하는 최소 글자수를 만족하지 못하는 경우 변경 실패 처리
+
+
+
+### 설정완료❗
