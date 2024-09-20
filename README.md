@@ -9,7 +9,14 @@ sudo nano /etc/pam.d/system-auth  # RHEL/CentOS
 ```
 
 설정 파일 열기
-`sudo vi /etc/pam.d/common-password`
+```
+sudo vi /etc/pam.d/common-password
+```
+
+
+pw 조건을 설정하는
+`password requisite pam_pwquality`
+에 해당하는 부분을 수정한다.
 
 
 다음과 같이 수정
@@ -57,8 +64,11 @@ password        required                        pam_permit.so
 
 
 기존 비밀번호는 유지되며, 비밀번호 변경 시에 설정을 참고하여 비밀번호를 규제한다.
+```
+passwd <user 명>
+```
+![11111](https://github.com/user-attachments/assets/390e4c0c-763c-4728-b44d-5e0a0a2d12ef)
 
-![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/3de15034-236d-43f9-9f62-106629074d8b/15210847-fcf5-4f12-9b98-cc8e1b446bcb/image.png)
 
 설정한 비밀번호 최소 길이보다 짧은 경우
 
